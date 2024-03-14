@@ -101,7 +101,7 @@ class TargetBigQuery(Target):
         ),
         th.Property(
             "denormalized",
-            th.BooleanType,
+            th.StringType,
             description=(
                 "Determines whether to denormalize the data before writing to BigQuery. A false"
                 " value will write data using a fixed JSON column based schema, while a true value"
@@ -447,6 +447,7 @@ class TargetBigQuery(Target):
         method, denormalized = self.config.get("method", "storage_write_api"), self.config.get(
             "denormalized", False
         )
+        denormalized = denormalized.lower() == "true"
         if method == "batch_job":
             if denormalized:
                 return BigQueryBatchJobDenormalizedSink
